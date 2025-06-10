@@ -1,0 +1,60 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 245, 245, 245;
+  --background-end-rgb: 255, 255, 255;
+}
+
+.dark {
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 30, 30, 30;
+  --background-end-rgb: 15, 15, 15;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(to bottom, transparent, rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
+  font-family: var(--font-inter);
+}
+
+/* Simulate Helvetica Neue Condensed Bold styling */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.card-title,
+.tabs-trigger,
+.badge {
+  font-family: var(--font-inter);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  font-stretch: condensed;
+}
+
+/* Apply condensed styling to specific elements */
+.font-condensed {
+  font-family: var(--font-inter);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  font-stretch: condensed;
+}
+
+/* Additional condensed variants */
+.font-condensed-medium {
+  font-family: var(--font-inter);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  font-stretch: condensed;
+}
+
+.font-condensed-semibold {
+  font-family: var(--font-inter);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  font-stretch: condensed;
+}
