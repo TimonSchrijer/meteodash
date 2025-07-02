@@ -32,6 +32,46 @@ export default function Dashboard() {
   const [selectedDayIndex, setSelectedDayIndex] = useState(0)
   const [weatherData, setWeatherData] = useState(mockWeatherData)
 
+  // Fetch real data from endpoint on mount
+  useEffect(() => {
+    fetch("https://forecast-staging.buienradar.nl/3.0/beach")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && data.regions) {
+          setWeatherData(
+            data.regions.map((region: any) => ({
+              region: region.region,
+              days: region.days.map((day: any) => ({
+                date: day.date,
+                mintemperature: day.minTemperature,
+                maxtemperature: day.maxTemperature,
+                iconcode: day.iconCode,
+                windspeedms: day.windSpeedMs,
+                winddirectiondegrees: day.windDirectionDegrees,
+                winddirection: day.windDirection,
+                beaufort: day.beaufort,
+                precipitation: day.precipitation,
+                uvindex: day.uvIndex,
+                waveheight: day.waveHeight,
+                wavedirection: day.waveDirection,
+                seawatertemperature: day.seaWaterTemperature,
+                lowtide: day.lowTide,
+                hightide: day.highTide,
+                alert_jellyfish: day.warningJellyfish ? "True" : "False",
+                alert_floatingdevices: day.warningFloatingDevices ? "True" : "False",
+                alert_dangeroussea: day.warningDangerousSea ? "True" : "False",
+                alert_ripcurrent: day.warningRipCurrent ? "True" : "False",
+              })),
+            }))
+          )
+        }
+      })
+      .catch(() => {
+        // fallback to mockWeatherData
+        setWeatherData(mockWeatherData)
+      })
+  }, [])
+
   // Update time every minute
   useEffect(() => {
     const timer = setInterval(() => {
@@ -62,7 +102,7 @@ export default function Dashboard() {
 
   // Get current region data
   const getCurrentRegionData = () => {
-    const region = weatherData.find((r) => r.region === selectedRegion)
+    const region = weatherData.find((r: any) => r.region === selectedRegion)
     return region?.days || []
   }
 
@@ -83,7 +123,7 @@ export default function Dashboard() {
   }
 
   // Format forecast date
-  const formatForecastDate = (dateString) => {
+  const formatForecastDate = (dateString: string) => {
     const date = new Date(dateString)
     return date.toLocaleDateString("nl-NL", {
       weekday: "short",
@@ -93,7 +133,7 @@ export default function Dashboard() {
   }
 
   // Get weather icon based on icon code
-  const getWeatherIcon = (iconCode) => {
+  const getWeatherIcon = (iconCode: string) => {
     switch (iconCode) {
       case "sunny":
         return <Sun className="h-10 w-10 text-yellow-500" />
@@ -111,7 +151,7 @@ export default function Dashboard() {
   }
 
   // Get alert status color
-  const getAlertColor = (status) => {
+  const getAlertColor = (status: string) => {
     return status === "True" ? "destructive" : "secondary"
   }
 
@@ -143,16 +183,28 @@ export default function Dashboard() {
 
         <Tabs defaultValue="Noord-Holland" onValueChange={setSelectedRegion}>
           <TabsList className="grid grid-cols-4 mb-6">
-            <TabsTrigger value="Noord-Holland" className="font-condensed">
+            <TabsTrigger
+              value="Noord-Holland"
+              className="font-condensed data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:border-blue-700 data-[state=active]:shadow-lg data-[state=active]:font-bold hover:bg-blue-100 hover:text-blue-900 transition-colors"
+            >
               Noord-Holland
             </TabsTrigger>
-            <TabsTrigger value="Zuid-Holland" className="font-condensed">
+            <TabsTrigger
+              value="Zuid-Holland"
+              className="font-condensed data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:border-blue-700 data-[state=active]:shadow-lg data-[state=active]:font-bold hover:bg-blue-100 hover:text-blue-900 transition-colors"
+            >
               Zuid-Holland
             </TabsTrigger>
-            <TabsTrigger value="Zeeland" className="font-condensed">
+            <TabsTrigger
+              value="Zeeland"
+              className="font-condensed data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:border-blue-700 data-[state=active]:shadow-lg data-[state=active]:font-bold hover:bg-blue-100 hover:text-blue-900 transition-colors"
+            >
               Zeeland
             </TabsTrigger>
-            <TabsTrigger value="Waddeneilanden" className="font-condensed">
+            <TabsTrigger
+              value="Waddeneilanden"
+              className="font-condensed data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:border-blue-700 data-[state=active]:shadow-lg data-[state=active]:font-bold hover:bg-blue-100 hover:text-blue-900 transition-colors"
+            >
               Waddeneilanden
             </TabsTrigger>
           </TabsList>
@@ -162,13 +214,15 @@ export default function Dashboard() {
               {/* Forecast Overview */}
               <Card>
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-lg font-condensed">7-Daagse Verwachting</CardTitle>
+                  <CardTitle className="text-lg font-condensed">
+                    {region.days.length}-Daagse Verwachting
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <ForecastOverview
                     days={region.days}
                     selectedDayIndex={selectedDayIndex}
-                    onDaySelect={(index) => setSelectedDayIndex(index)}
+                    onDaySelect={(index: number) => setSelectedDayIndex(index)}
                   />
                 </CardContent>
               </Card>
@@ -409,7 +463,7 @@ export default function Dashboard() {
 }
 
 // Label component
-function Label({ htmlFor, children, className }) {
+function Label({ htmlFor, children, className }: { htmlFor: string; children: React.ReactNode; className?: string }) {
   return (
     <label
       htmlFor={htmlFor}
