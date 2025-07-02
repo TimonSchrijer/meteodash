@@ -34,7 +34,7 @@ export default function Dashboard() {
 
   // Fetch real data from endpoint on mount
   useEffect(() => {
-    fetch("https://forecast-staging.buienradar.nl/3.0/beach")
+    fetch("/api/beach")
       .then((res) => res.json())
       .then((data) => {
         if (data && data.regions) {
